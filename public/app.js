@@ -1,4 +1,4 @@
-const socket = io("ws://localhost:3500");
+const socket = io("https://whim-chat.onrender.com");
 const activity = document.querySelector(".activity");
 const usersList = document.querySelector(".user-list");
 const roomList = document.querySelector(".room-list");
