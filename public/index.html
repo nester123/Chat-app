@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whim</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script
+      src="https://cdn.socket.io/4.8.0/socket.io.min.js"
+      integrity="sha384-OoIbkvzsFFQAG88r+IqMAjyOtYDPGO0cqK5HF5Uosdy/zUEGySeAzytENMDynREd"
+      crossorigin="anonymous"
+    ></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main>
+    <form action="" class="form-join">
+      <input
+        type="text"
+        id="name"
+        maxlength="8"
+        placeholder="Your name"
+        size="5"
+        required
+      />
+      <input type="text" id="room" placeholder="Chat room" size="5" required />
+      <button type="submit" id="join">Join</button>
+    </form>
+
+    <ul class="chat-display"></ul>
+
+    <p class="user-list"></p>
+
+    <p class="room-list"></p>
+
+    <p class="activity"></p>
+
+    <form class="form-msg" action="">
+      <input required id="message" type="text" placeholder="your message" name="message" />
+      <button type="submit">send</button>
+    </form>
+  </main>
+  </body>
+</html>
