@@ -7,21 +7,25 @@ const nameInput = document.querySelector("#name");
 const chatRoom = document.querySelector("#room");
 const chatDisplay = document.querySelector(".chat-display");
 
+// Save a message to localStorage for the specific room
 function saveMessageToLocal(room, message) {
   const messages = JSON.parse(localStorage.getItem(`messages_${room}`)) || [];
   messages.push(message);
   localStorage.setItem(`messages_${room}`, JSON.stringify(messages));
 }
 
+// Load and display messages from localStorage for the specific room
 function loadMessagesFromLocal(room) {
   const messages = JSON.parse(localStorage.getItem(`messages_${room}`)) || [];
   messages.forEach(displayMessage);
 }
 
+// Clear messages in localStorage for a specific room
 function clearMessagesFromLocal(room) {
   localStorage.removeItem(`messages_${room}`);
 }
 
+// Send a message to the server
 function sendMessage(e) {
   e.preventDefault();
   if (nameInput.value && input.value && chatRoom.value) {
@@ -30,14 +34,13 @@ function sendMessage(e) {
       name: nameInput.value,
       time: new Date().toLocaleTimeString(),
     };
-    socket.emit("message", messageData);
-    displayMessage(messageData);
-    saveMessageToLocal(chatRoom.value, messageData);
+    socket.emit("message", messageData); // Send to server
     input.value = "";
   }
   input.focus();
 }
 
+// Enter a room and load previous messages
 function enterRoom(e) {
   e.preventDefault();
   if (nameInput.value && chatRoom.value) {
@@ -50,6 +53,7 @@ function enterRoom(e) {
   }
 }
 
+// Display a message in the chat display
 function displayMessage(data) {
   const { name, text, time } = data;
   const li = document.createElement("li");
@@ -69,16 +73,19 @@ function displayMessage(data) {
 document.querySelector(".form-msg").addEventListener("submit", sendMessage);
 document.querySelector(".form-join").addEventListener("submit", enterRoom);
 
+// Notify other users when typing
 input.addEventListener("keypress", () => {
   socket.emit("activity", nameInput.value);
 });
 
+// Handle incoming messages from the server
 socket.on("message", (data) => {
   activity.textContent = "";
-  displayMessage(data);
-  saveMessageToLocal(chatRoom.value, data); // Save message on receive
+  displayMessage(data); // Display message
+  saveMessageToLocal(chatRoom.value, data); // Save message to localStorage
 });
 
+// Handle activity indicator
 socket.on("activity", (name) => {
   activity.textContent = `${name} is typing...`;
   clearTimeout(activityTimer);
@@ -87,7 +94,8 @@ socket.on("activity", (name) => {
   }, 1000);
 });
 
-socket.on('userList', ({ users }) => {
+// Update user list
+socket.on("userList", ({ users }) => {
   showUsers(users);
 });
 
@@ -104,6 +112,7 @@ function showUsers(users) {
   }
 }
 
+// Update room list
 socket.on("roomsList", ({ rooms }) => {
   showRooms(rooms);
 });
