@@ -57,8 +57,15 @@ function enterRoom(e) {
 function displayMessage(data) {
   const { name, text, time } = data;
   const li = document.createElement("li");
-  li.className = "post";
-  li.className += name === nameInput.value ? " post--left" : " post--right";
+  
+  // Check if the message is from the Admin
+  if (name === "Admin") {
+    li.className = "post"; // Only the class "post" for Admin messages
+  } else {
+    li.className = "post";
+    li.className += name === nameInput.value ? " post--left" : " post--right";
+  }
+  
   li.innerHTML = `
     <div class="post__header ${name === nameInput.value ? "post__header--user" : "post__header--reply"}">
       <span class="post__header--name">${name}</span>
@@ -66,9 +73,11 @@ function displayMessage(data) {
     </div>
     <div class="post__text">${text}</div>
   `;
+  
   chatDisplay.appendChild(li);
   chatDisplay.scrollTop = chatDisplay.scrollHeight;
 }
+
 
 document.querySelector(".form-msg").addEventListener("submit", sendMessage);
 document.querySelector(".form-join").addEventListener("submit", enterRoom);
